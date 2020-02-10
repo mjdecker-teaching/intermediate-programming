@@ -9,10 +9,16 @@
 #include <iostream>
 #include <string>
 
+/**
+ * a struct
+ * collection of names data (can differ in type)
+ * can be anonymous (don't need to say it is a point)
+ * can create when defining (e.g., a_point)
+ */
 struct point {
     int x;
     int y;
-};
+} a_point;
 
 struct array {
     int size;
@@ -25,6 +31,12 @@ int main(int argc, char * argv[]) {
 
     std::cout << "x = " << p.x << '\n';
     std::cout << "y = " << p.y << '\n';
+
+    a_point.x = 0;
+    a_point.y = 2;
+
+    std::cout << "x = " << a_point.x << '\n';
+    std::cout << "y = " << a_point.y << '\n';
 
     const int size = 5;
     int elements[] = {4, 42, 16, 13, 9001};
