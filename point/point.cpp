@@ -48,7 +48,7 @@ point::point(int x, int y)
  *  
  * @return objects x value
  */
-int point::get_x() {
+int point::get_x() const {
     return x;
 }
 
@@ -59,7 +59,7 @@ int point::get_x() {
  *
  * @returns objects y value
  */
-int point::get_y() {
+int point::get_y() const {
     return y;
 }
 
@@ -166,7 +166,7 @@ int point::operator-(const point & other) {
  *
  * print out object
  */
-void point::print() {
+void point::print() const {
 
     std::cout << "x: " << x << " y: " << y << '\n';
 
