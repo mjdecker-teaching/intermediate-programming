@@ -1,49 +1,110 @@
 /**
- * @file main.cpp
+ *  @file main.cpp
  *
- * This is a generic C++ main file.
+ *  Main class illustrate basic class usage through point class.
  *
- * @author Michael John Decker, Ph.D. <mdecke@bsgu.edu>
+ *  @author Michael John Decker <mdecker6@kent.edu>
  */
 
 #include <iostream>
 #include "point.hpp"
 
+/**
+ * ADT - Abstract Data Type = Mathematical model for data types
+ *       Consists of:
+ *       data
+ *       operations on that data
+ *       rules of usage
+ *
+ * classes used to realize an ADT
+ *
+ * information hiding - the interface
+ *     (how you access/use something) is separated
+ *     from how it is implemented.
+ * encapsulation - bundling of data/methods and restricting of direct access to
+ *     components
+ *
+ * A class is sort of like a black box.
+ * information hiding is principle and encapsulation is the technique
+ */
+
 int main(int argc, char * argv[]) {
 
-    const point p(3, 4);
-    p.print();
+    // with no constructors an implicitly defined default constructor is created
+    // When create a constructor the implicitly defined default is not created
+  
+    // Can't declare an array of an object without default constructor
+    // point points[4];
 
-    point apoint(42, 12);
-    apoint.print();
+    // can't access private x,y
+    // access via . operator
+    //point p;
+    //p.x;
+    //p.y;
+  
+    // show has random values (need a constructor)
+    // initialize a object via a constructor
+    // object is an instance of the class
+    // all instances are separate from each other
+    // calling one method on object runs on that instance only
+    point default_init;
+    // method also invoked called via . operator
+    default_init.print();
 
-    apoint.set_x(16);
-    apoint.set_y(3);
+    point start(-2, 1);
+    start.print();
 
-    std::cout << "apoint.get_x() == " << apoint.get_x() << '\n';
+    point end(1, 5); 
+    end.print();
 
-    point points[] = { point(32, 64),
-		       point(128, 256),
-		       point(512, 1024),
-		       point(2048, 4096),
-		       point()
-    };
+    std::cout << '\n';
 
+    // distance between points
+    std::cout << "distance: " << start.distance(end) << '\n';
 
-    for(int pos = 0; pos < 5; ++pos) {
-	points[pos].print();
-    }
+    std::cout << '\n';
 
-    //point new_point = p.add(apoint);
-    point new_point = p + apoint;
-    new_point.print();
+    // add points (cleaner as method)
+    std::cout << "sum: ";
+    point sum = start.add(end);
+    sum.print();
 
-    point location = p + apoint + new_point;
+    // operator+
+    std::cout << "op_call_sum: ";
+    point op_call_sum = start.operator+(end);
+    op_call_sum.print();
 
-    //int distance = p.operator-(apoint);
-    int distance = p - apoint;
+    std::cout << "op_sum: ";
+    point op_sum = start + end;
+    op_sum.print();
+
+    // print this when called
+    std::cout << "reverse: ";
+    point reverse = end + start;
+    reverse.print();
+
+    std::cout << "temp_sum: ";
+    point temp_sum = start + point(-1,-2);
+    temp_sum.print();
+    std::cout << "temp_sum: ";
+    (start + point(-1,-2)).print();
+
+    //operator-
+    std::cout << '\n';
+    std::cout << "distance: " << (start - end) << '\n';
+    std::cout << "distance: " << (end - start) << '\n';
+
+    // const object can only call const methods
+    const point const_point(3, 4);
     
-    std::cout << "distance is " << distance << "\n";
+    
+    point points[] =  { point(), point(1, 2), point(3, 3), point(5, 3) };
+    int x_total = 0;
+    for(int pos = 0; pos < 4; ++pos) {
+        x_total += points[pos].get_x();
+    }
+    std::cout << "x total: " << x_total << '\n';
 
+    
     return 0;
 }
