@@ -1,34 +1,49 @@
 /**
- *  @file main.cpp
+ * @file main.cpp
  *
- *  Illustrate stack class.
+ * Shows use of stack class.
  *
- *  @author Michael John Decker <mdecker6@kent.edu>
+ * @author Michael John Decker, Ph.D. <mdecke@bgsu.edu>
  */
 
 #include <iostream>
 #include "stack.hpp"
-#include <string>
+
+class foo {
+public:
+	foo(int i = 0) {}
+
+};
 
 int main(int argc, char * argv[]) {
 
-    stack<int> int_stack;
-    int_stack.push(42);
-    int_stack.push(21);
-    int_stack.push(7);
- 
-    std::cout << int_stack.top() << '\n';
-    int_stack.pop();
-    std::cout << int_stack.top() << '\n';
-    int_stack.pop();
-    std::cout << int_stack.top() << '\n';
-    int_stack.pop();
+	stack<int> int_stack;
 
-    int_stack.push(12);
-    std::cout << int_stack.top() << '\n';
-    int_stack.pop();
+	int_stack.push(42);
+	int_stack.push(11);
+	int_stack.push(14);
 
-    stack<std::string> str_stack;
+	std::cout << "top = " << int_stack.top() << '\n';
+
+	int_stack.pop();
+	std::cout << "top = " << int_stack.top() << '\n';
+
+	int_stack.pop();
+	std::cout << "top = " << int_stack.top() << '\n';
+
+	int_stack.push(7235);
+	std::cout << "top = " << int_stack.top() << '\n';
+
+	int_stack.push(-56);
+	std::cout << "top = " << int_stack.top() << '\n';
+
+	stack<double> double_stack;
+
+	double_stack.push(3.14);
+	std::cout << double_stack.top() << '\n';
+
+	stack<foo> foo_stack;
+
 
     return 0;
 }
