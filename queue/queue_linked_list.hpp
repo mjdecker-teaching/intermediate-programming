@@ -1,32 +1,39 @@
-#ifndef DQUEUE_HPP_
-#define DQUEUE_HPP_
+/**
+ * @file queue_linked_list_.hpp
+ *
+ * Queue ADT via a node class.
+ *
+ * @author Michael John Decker, Ph.D. <mdecke@bgsu.edu>
+ */
+
+#ifndef INCLUDED_QUEUE_HPP
+#define INCLUDED_QUEUE_HPP
 
 #include <cassert>
-#include <new>
 
-template <typename type>
+template<typename type>
 struct node {
-    node() : next(nullptr) {}
-    node(const type & item) : next(nullptr), data(item) {}
-
-    node<type> * next;
     type data;
+    node * next;
+
+    node() : next(nullptr) {}
+    node(const type & item, node * link = nullptr) : data(item), next(link) {}
 };
 
-template <typename type>
+template<typename type>
 class queue {
 private:
-    node<type> * start;
-    node<type> * end;
+    node<type> * head;
+    node<type> * tail;
+
 public:
-
-    queue() : start(nullptr), end(nullptr) {};
+    queue() : head(nullptr), tail(nullptr) {}
+    queue(const queue &);
     ~queue();
-
-    queue(queue<type>&);
-    void swap(queue<type> &);
+    void swap(queue &);
     queue<type> & operator=(queue<type> rhs) { swap(rhs); return *this; }
-    
+
+
     type front() const;
     type & front();
 
@@ -34,112 +41,111 @@ public:
     type & back();
 
     void dequeue();
-    void enqueue(const type &);
-    bool empty() const { return start == 0; };
-    bool full() const;
+    void enqueue(const type & item);
+
+    bool is_empty() const {  return head == nullptr; }
+    bool is_full() const;
 
 };
 
-template <typename type>
+template<typename type>
 queue<type>::~queue() {
-    while(!empty())
+    while(!is_empty()) {
 	dequeue();
-    
-/*    while (start != 0) {
-        node<type> * temp = start;
-        start = start->next;
-        delete temp;
     }
-*/
+
 }
 
-template <typename type>
-queue<type>::queue(queue<type>& actual) : queue<type>() {
-    node<type> * temp = actual.start;
+template<typename type>
+queue<type>::queue(const queue<type> & that) {
 
-    for(node<type> temp = actual.start; temp != nullptr; temp = temp->next) {
+    for(node<type> * temp = that->head; temp != nullptr; temp = temp->next) {
 	enqueue(temp->data);
 /*
-        if (start == nullptr) {
-            start = new node<type>(temp->data);
-            end = start;
-        } else {
-            end->next = new node<type>(temp->data);
-            end = end->next;
-        }
-    }
+	if(head == nullptr) {
+	    head = new node<type>(temp->data);
+	    tail = tail;
+	} else {
+	    tail->next = new node<type>(temp->data);
+	    tail = tail->next;
+	}
 */
+    }
+
 }
 
 
-//////////////////////////////////////////////////////////
-// Constant time swap
-//
-template <typename type>
-void queue<type>::swap(queue<type>& x) {
-    node<type> * temp_start = start;
-    start = x.start;
-    x.start = temp_start;
+template<typename type>
+void queue<type>::swap(queue<type> & rhs) {
+    node<type> * temp_head = head;
+    head = rhs.head;
+    rhs.head = temp_head;
 
-    node<type> * temp_end = end;
-    end = x.end;
-    x.end = temp_end;
+    node<type> * temp_tail = tail;
+    tail = rhs.tail;
+    rhs.tail = temp_tail;
+
 }
 
+template<typename type>
+void queue<type>::enqueue(const type & item) {
+    assert(!is_full());
 
-template <typename type>
-bool queue<type>::full() const {
-    node<type> * temp = new (std::nothrow) node<type>;
-    if (!temp) return true;
+    node<type> * new_node = new node<type>(item);
 
+    if(tail == nullptr) {
+	head = new_node;
+    } else {
+	tail->next = new_node;
+    }
+
+    tail = new_node;
+    
+}
+
+template<typename type>
+void queue<type>::dequeue() {
+    assert(!is_empty());
+
+    node<type> * temp = head;
+    head = head->next;
     delete temp;
-    return false;
+    
 }
 
 template<typename type>
 type queue<type>::front() const {
-    assert(!empty());
-    return start->data;
+    assert(!is_empty());
+    return head->data;
 }
 
 template<typename type>
 type & queue<type>::front() {
-    assert(!empty());
-    return start->data;
+    assert(!is_empty());
+    return head->data;
 }
 
 template<typename type>
 type queue<type>::back() const {
-    assert(!empty());
-    return end->data;
+    assert(!is_empty());
+    return tail->data;
 }
 
 template<typename type>
 type & queue<type>::back() {
-    assert(!empty());
-    return end->data;
+    assert(!is_empty());
+    return tail->data;
 }
 
-template <typename type>
-void queue<type>::dequeue() {
-    assert(!empty());
+template<typename type>
+bool queue<type>::is_full() const {
 
-    type result = start->data;
-    node<type> *temp = start;
-    start = start->next;
+    node<type> * temp = new (std::nothrow) node<type>;
+    if(!temp) return true;
+
     delete temp;
-}
+    return false;
 
-template <typename type>
-void queue<type>::enqueue(const type & item) {
-    assert(!full());
-
-    node<type> * temp = new node<type>(item);
-    if (end == nullptr)
-        start = temp;
-    else
-        end->next = temp;
-    end = temp;
 }
 
 #endif

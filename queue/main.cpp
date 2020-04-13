@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <string>
-#include "queue.hpp"
+#include "queue_linked_list.hpp"
 
 int main(int argc, char * argv[]) {
 
@@ -21,7 +21,7 @@ int main(int argc, char * argv[]) {
         
     }
 
-    while(!int_queue.empty()) {
+    while(!int_queue.is_empty()) {
         std::cout << "front: " << int_queue.front() << '\n';
         int_queue.dequeue();
     }
@@ -31,7 +31,7 @@ int main(int argc, char * argv[]) {
         int_queue.enqueue(num++);
     }
 
-    while(!int_queue.empty()) {
+    while(!int_queue.is_empty()) {
         std::cout << "front: " << int_queue.front() << '\n';
         int_queue.dequeue();
     }
@@ -64,7 +64,7 @@ int main(int argc, char * argv[]) {
     two.dequeue();
     std::cout << "front: " << two.front() << '\n';
     two.dequeue();
-    std::cout << "empty: " << std::boolalpha << two.empty() << '\n';
+    std::cout << "is_empty: " << std::boolalpha << two.is_empty() << '\n';
 
     return 0;
 }

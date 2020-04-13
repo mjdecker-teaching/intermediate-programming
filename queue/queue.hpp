@@ -53,10 +53,10 @@ public:
 	return buffer[end_pos];
     }
 
-    bool full() const {
+    bool is_full() const {
 	return size == MAX_SIZE;
     }
-    bool empty() const {
+    bool is_empty() const {
 	return size == 0;
     }
 
