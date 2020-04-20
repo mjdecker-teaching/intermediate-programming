@@ -1,14 +1,14 @@
-#ifndef JM_DLIST_HPP_
-#define JM_DLIST_HPP_
+#ifndef INCLUDED_DLIST_HPP
+#define INCLUDED_DLIST_HPP
 
 ////////////////////////////////////////////////////////
 //
 // File:         dlist.hpp
 // Description:  double linked list and iterator ADT
-// Programmer:   Dr. J. Maletic, KSU
+// Programmers:   Dr. J. Maletic, KSU, Dr. M. Decker, BGSU
 //
 // Date:         11/2008
-// Updated:       4/2016
+// Updated:       4/2020
 //
 //
 //
