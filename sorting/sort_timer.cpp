@@ -58,6 +58,8 @@ int main(int argc, char * argv[]) {
     std::cout << "\nSelection sort max\n";
     time_call(selection_sort_max, elements.data());
 
+    std::cout << "\nInsertion sort\n";
+    time_call(insertion_sort, elements.data());
 
     return 0;
 }

@@ -33,17 +33,23 @@ int main(int argc, char * argv[]) {
 
     int typical[] = { 9, 5, 12, 3, 7, 1 };
     int typical_sorted[] = { 1, 3, 5, 7, 9, 12 };
-
+/*
     assert_sort(bubble_sort, empty, empty, 0);
     assert_sort(bubble_sort, single, single, 1);
     assert_sort(bubble_sort, typical, typical_sorted, 6);
-
+*/
     assert_sort(selection_sort, empty, empty, 0);
     assert_sort(selection_sort, single, single, 1);
     assert_sort(selection_sort, typical, typical_sorted, 6);
-
+/*
     assert_sort(selection_sort_max, empty, empty, 0);
     assert_sort(selection_sort_max, single, single, 1);
     assert_sort(selection_sort_max, typical, typical_sorted, 6);
+
+*/
+    assert_sort(insertion_sort, empty, empty, 0);
+    assert_sort(insertion_sort, single, single, 1);
+    assert_sort(insertion_sort, typical, typical_sorted, 6);
+
     return 0;
 }
