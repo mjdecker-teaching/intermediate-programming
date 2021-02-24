@@ -38,5 +38,11 @@ int main() {
     assert(right_triangle.get_height() == 4.0);
     assert(right_triangle.get_hypotenuse() == 5.0);
 
+    triangle copy(right_triangle);
+    //triangle copy = right_triangle;
+
+    triangle duplicate;
+    duplicate = right_triangle;
+    
     return 0;
 }

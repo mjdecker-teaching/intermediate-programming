@@ -18,7 +18,11 @@ private:
 public:
 
 	triangle(double base = 3, double height = 4, double hypotenuse = 5);
+        triangle(const triangle & other);
+        ~triangle();
 
+        triangle & operator=(triangle);
+    
 	double get_base() const;
 	double get_height() const;
 	double get_hypotenuse() const;

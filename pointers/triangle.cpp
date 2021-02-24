@@ -1,10 +1,26 @@
 #include "triangle.hpp"
 
+#include <iostream>
+
 triangle::triangle(double base, double height, double hypotenuse) {
 	this->base = new double(base);
 	this->height = new double(height);
 	this->hypotenuse = new double(hypotenuse);
 }
+
+triangle::triangle(const triangle & other) {
+    base = new double(*other.base);
+    height = new double(other.get_height());
+    hypotenuse = new double(other.get_hypotenuse());
+}
+
+triangle::~triangle() {
+    std::cerr << "HERE: " << __FILE__ << ' ' << __FUNCTION__ << ' ' << __LINE__ << '\n';
+    delete base;
+    delete height;
+    delete hypotenuse;
+}
+
 
 double triangle::area() const {
     return 0.5 * (*base) * (*height);
