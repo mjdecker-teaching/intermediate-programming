@@ -3,9 +3,9 @@
 #include <iostream>
 
 triangle::triangle(double base, double height, double hypotenuse) {
-	this->base = new double(base);
-	this->height = new double(height);
-	this->hypotenuse = new double(hypotenuse);
+    this->base = new double(base);
+    this->height = new double(height);
+    this->hypotenuse = new double(hypotenuse);
 }
 
 triangle::triangle(const triangle & other) {
@@ -21,6 +21,26 @@ triangle::~triangle() {
     delete hypotenuse;
 }
 
+void triangle::swap(triangle & other) {
+    double * temp_base = base;
+    base = other.base;
+    other.base = temp_base;
+
+    double * temp_height = height;
+    height = other.height;
+    other.height = temp_height;
+
+    double * temp_hypotenuse = hypotenuse;
+    hypotenuse = other.hypotenuse;
+    other.hypotenuse = temp_hypotenuse;
+    
+}
+
+triangle & triangle::operator=(triangle other) {
+    swap(other);
+    return *this;
+}
+
 
 double triangle::area() const {
     return 0.5 * (*base) * (*height);
@@ -32,7 +52,7 @@ double triangle::perimeter() const {
 
 void triangle::set_height(double height) {
     delete this->height;
-    this->height = new double(height);   
+    this->height = new double(height);
 }
 
 void triangle::set_base(double base) {
@@ -56,4 +76,3 @@ double triangle::get_base() const {
 double triangle::get_hypotenuse() const {
     return *hypotenuse;
 }
-

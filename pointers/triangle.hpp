@@ -21,6 +21,7 @@ public:
         triangle(const triangle & other);
         ~triangle();
 
+        void swap(triangle &);
         triangle & operator=(triangle);
     
 	double get_base() const;
