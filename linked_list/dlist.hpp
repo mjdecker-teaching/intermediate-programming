@@ -1,3 +1,4 @@
+
 #ifndef INCLUDED_DLIST_HPP
 #define INCLUDED_DLIST_HPP
 
@@ -48,27 +49,27 @@ public:
 template <typename T>
 class iterator {
 public:
-    iterator        (dnode<T> *ptr=0)  : current(ptr) {}
-    iterator<T>&         operator++ ()                 {if (current) current = current->next; return *this; } //Pre
-    iterator<T>&         operator-- ()                 {if (current) current = current->prev; return *this; } //Pre
+    iterator        (dnode<T> * ptr=0)  : current(ptr) {}
+    iterator<T> &        operator++ ()                 {if (current) current = current->next; return *this; } //Pre
+    iterator<T> &        operator-- ()                 {if (current) current = current->prev; return *this; } //Pre
     iterator<T>          operator++ (int)              {iterator<T> orginal(current); if (current) current = current->next; return orginal; } //Post
     iterator<T>          operator-- (int)              {iterator<T> orginal(current); if (current) current = current->prev; return orginal; } //Post
-    T&              operator*  ()                 {return current->data;                                                          }
+    T &             operator*  ()                 {return current->data;                                                          }
     T               operator*  () const           {return current->data;                                                          }
-    dnode<T>*       operator-> ()                 {return current;                                                                }
+    dnode<T> *      operator-> ()                 {return current;                                                                }
     
-    const dnode<T>* operator-> () const           {return current;                                                                }
-    bool            operator== (iterator<T> ptr) const {return current == ptr.current; };
-    bool            operator!= (iterator<T> ptr) const {return current != ptr.current; };
+    const dnode<T> * operator-> () const           {return current;                                                                }
+    bool             operator== (iterator<T> ptr) const {return current == ptr.current; };
+    bool             operator!= (iterator<T> ptr) const {return current != ptr.current; };
 
 private:
-    dnode<T>        *current;
+    dnode<T> *        current;
 };
 
 
 ///////////////////////////////////////////////////////////
-// CLASS INV: (front_node == 0 && back_node ==0) ||
-//             front_node -> X[0] <-> X[1] <-> ... <-> X[length()-1] <- back_node
+// CLASS INV: (head == 0 && tail ==0) ||
+//             head -> X[0] <-> X[1] <-> ... <-> X[length()-1] <- tail
 //
 // REQUIRES: assignable(T) && copyconstructable(T) && comparable(T) && destructable(T)
 //
@@ -78,41 +79,42 @@ template<typename T>
 class list {
 public:
 
-    list        () : front_node(0), back_node(0)             {};
-    list        (const list<T>&);
-    list        (list<T>&&);
-    void         swap        (list<T>&);
-//    list<T>&     operator=   (list<T>&& rhs) {swap(rhs); return *this; };
+    list        () : head(nullptr), tail(nullptr)             {};
+    list        (const list<T> &);
+    //list        (list<T> &&);
+    void         swap        (list<T> &);
+    list<T>&     operator=   (list<T> & rhs) { swap(rhs); return *this; };
+    //list<T>&     operator=   (list<T>&& rhs) { swap(rhs); return *this; };
     //list<T>&     operator=   (const list<T>&);
     list<T>&     operator=   (list<T>);
     ~list       ();
 
-    bool         is_empty     () const        {return front_node == 0;   };
+    bool         is_empty     () const        {return head == 0; };
     bool         is_full      () const;
-    int          length      () const;
-    const iterator<T> begin       () const        {return iterator<T>(front_node);};
-    const iterator<T> end         () const        {return iterator<T>(back_node);   };
-    iterator<T>       begin       ()              {return iterator<T>(front_node);};
-    iterator<T>       end         ()              {return iterator<T>(back_node);   };
-    T            front       () const        {return front_node->data;  };
-    T            back        () const        {return back_node->data;     };
-    T&           front       ()              {return front_node->data;  };
-    T&           back        ()              {return back_node->data;     };
+    int          length       () const;
+    const iterator<T> begin       () const        {return iterator<T>(head); };
+    const iterator<T> end         () const        {return iterator<T>(tail); };
+    iterator<T>       begin       ()              {return iterator<T>(head); };
+    iterator<T>       end         ()              {return iterator<T>(tail); };
+    T            front       () const        {return head->data;  };
+    T            back        () const        {return tail->data;  };
+    T &          front       ()              {return head->data;  };
+    T &          back        ()              {return tail->data;  };
 
-    void             insertBefore(const T&, iterator<T>);
-    void         insertAfter (const T&, iterator<T>);
-    void                 remove      (iterator<T>&);
+    void         insertBefore(const T &, iterator<T>);
+    void         insertAfter (const T &, iterator<T>);
+    void         remove      (iterator<T> &);
     //void                 remove      (iterator<T>&&);
 
-    //really need const_iterator, but too much work.
+    // really need const_iterator, but too much work.
     const iterator<T> operator[]  (int) const;      //The ith node
     iterator<T>       operator[]  (int);            //The ith node
-    const iterator<T> find        (const T&) const;
-    iterator<T>       find        (const T&);
+    const iterator<T> find        (const T &) const;
+    iterator<T>       find        (const T &);
 
 private:
-    dnode<T>     *front_node;      //Points to first element [0]
-    dnode<T>     *back_node;         //Points to last element [length()-1].
+    dnode<T> *    head;      //Points to first element [0]
+    dnode<T> *    tail;      //Points to last element [length()-1].
 };
 
 
@@ -122,15 +124,15 @@ private:
 // Copy constuctor.
 template <typename T>
 list<T>::list(const list<T> &actual) : list() {
-    dnode<T> *temp = actual.front_node;
+    dnode<T> * temp = actual.head;
     while (temp != 0) {
-        if (front_node == 0) {
-            front_node = new dnode<T>(temp->data);
-            back_node = front_node;
+        if (head == 0) {
+            head = new dnode<T>(temp->data);
+            tail = head;
         } else {
-            back_node->next = new dnode<T>(temp->data);
-            back_node->next->prev = back_node;
-            back_node = back_node->next;
+            tail->next = new dnode<T>(temp->data);
+            tail->next->prev = tail;
+            tail = tail->next;
         }
         temp = temp->next;
     }
@@ -141,10 +143,10 @@ list<T>::list(const list<T> &actual) : list() {
 /*
 template <typename T>
 list<T>::list(list<T> &&actual) {
-    front_node        = actual.front_node;
-    back_node           = actual.back_node;
-    actual.front_node = 0;
-    actual.back_node    = 0;
+    head        = actual.head;
+    tail           = actual.tail;
+    actual.head = 0;
+    actual.tail    = 0;
 }
 */
 
@@ -152,12 +154,12 @@ list<T>::list(list<T> &&actual) {
 // Constant time swap
 template <typename T>
 void list<T>::swap(list<T> &b) {
-    dnode<T>* temp = front_node;
-    front_node      = b.front_node;
-    b.front_node    = temp;
-    temp           = back_node;
-    back_node         = b.back_node;
-    b.back_node       = temp;
+    dnode<T> * temp = head;
+    head            = b.head;
+    b.head          = temp;
+    temp            = tail;
+    tail            = b.tail;
+    b.tail          = temp;
 }
 
 
@@ -166,10 +168,10 @@ void list<T>::swap(list<T> &b) {
 //
 template <typename T>
 list<T>::~list() {
-    dnode<T> *temp;
-    while (front_node != 0) {
-        temp      = front_node;
-        front_node = front_node->next;
+    dnode<T> * temp;
+    while (head != 0) {
+        temp      = head;
+        head = head->next;
         delete temp;
     }
 }
@@ -186,23 +188,23 @@ list<T>& list<T>::operator=(list<T> rhs) {
 /*
 template <typename T>
 list<T>& list<T>::operator=(const list<T>& rhs) {
-    if (front_node == rhs.front_node) return *this;
+    if (head == rhs.head) return *this;
     dnode<T> *temp;
-    while (front_node != 0) {
-        temp      = front_node;
-        front_node = front_node->next;
+    while (head != 0) {
+        temp      = head;
+        head = head->next;
         delete temp;
     }
-    back_node = 0;
-    temp   = rhs.front_node;
+    tail = 0;
+    temp   = rhs.head;
     while (temp != 0) {
-        if (front_node == 0) {
-            front_node = new dnode<T>(temp->data);
-            back_node    = front_node;
+        if (head == 0) {
+            head = new dnode<T>(temp->data);
+            tail    = head;
         } else {
-            back_node->next       = new dnode<T>(temp->data);
-            back_node->next->prev = back_node;
-            back_node             = back_node->next;
+            tail->next       = new dnode<T>(temp->data);
+            tail->next->prev = tail;
+            tail             = tail->next;
         }
         temp = temp->next;
     }
@@ -219,7 +221,7 @@ list<T>& list<T>::operator=(const list<T>& rhs) {
 //
 template <typename T>
 bool list<T>::is_full() const {
-    dnode<T> *temp = new(std::nothrow) dnode<T>;
+    dnode<T> * temp = new(std::nothrow) dnode<T>;
     if (!temp) return true;  //No more memory to allocate
     delete temp;
     return false;
@@ -232,7 +234,7 @@ bool list<T>::is_full() const {
 template <typename T>
 int list<T>::length() const {
     int  result = 0;
-    for (iterator<T> i = front_node; i != 0; ++i) ++result;
+    for (iterator<T> i = head; i != 0; ++i) ++result;
     return result;
 }
 
@@ -244,7 +246,7 @@ int list<T>::length() const {
 template <typename T>
 const iterator<T> list<T>::operator[](int i) const {
     if (i < 0) return iterator<T>();
-    iterator<T> result = front_node;
+    iterator<T> result = head;
     int  pos = 0;
     while ((pos != i) && (result != 0)) {
         ++pos;
@@ -261,7 +263,7 @@ const iterator<T> list<T>::operator[](int i) const {
 template <typename T>
 iterator<T> list<T>::operator[](int i) {
     if (i < 0) return iterator<T>();
-    iterator<T> result = front_node;
+    iterator<T> result = head;
     int  pos = 0;
     while ((pos != i) && (result != 0)) {
         ++pos;
@@ -276,7 +278,7 @@ iterator<T> list<T>::operator[](int i) {
 //
 template <typename T>
 const iterator<T> list<T>::find(const T& x) const {
-    for (iterator<T> i = front_node; i != 0; ++i)
+    for (iterator<T> i = head; i != 0; ++i)
         if (*i == x) return i;
     return iterator<T>();
 }
@@ -286,60 +288,60 @@ const iterator<T> list<T>::find(const T& x) const {
 //
 template <typename T>
 iterator<T> list<T>::find(const T& x) {
-    for (iterator<T> i = front_node; i != 0; ++i)
+    for (iterator<T> i = head; i != 0; ++i)
         if (*i == x) return i;
     return iterator<T>();
 }
 
 
 ///////////////////////////////////////////////////////////
-// REQUIRES: front_node -> a <-> b <-> ... c <- back_node
+// REQUIRES: head -> a <-> b <-> ... c <- tail
 //           && ptr -> a || b || ... c
-// ENSURES:  if ptr->b then front_node -> a <-> b <-> X <-> ... c <- back_node
+// ENSURES:  if ptr->b then head -> a <-> b <-> X <-> ... c <- tail
 //
 template <typename T>
 void list<T>::insertAfter(const T& x, iterator<T> ptr) {
-    dnode<T> *temp = new dnode<T>(x);
+    dnode<T> * temp = new dnode<T>(x);
     if (is_empty()) {
-        front_node = temp;
-        back_node    = temp;
+        head = temp;
+        tail    = temp;
     } else {
         temp->prev = ptr.operator->();
         temp->next = ptr->next;
         if (ptr->next != 0)
             ptr->next->prev = temp;
         else
-            back_node = temp;
+            tail = temp;
         ptr->next = temp;
     }
 }
 
 ///////////////////////////////////////////////////////////
-// REQUIRES: front_node -> a <-> b <-> ... c <- back_node
+// REQUIRES: head -> a <-> b <-> ... c <- tail
 //           && ptr -> a || b || ... c
-// ENSURES:  if ptr->b then front_node -> a <-> X <-> b <-> ... c <- back_node
+// ENSURES:  if ptr->b then head -> a <-> X <-> b <-> ... c <- tail
 //
 template <typename T>
 void list<T>::insertBefore(const T& x, iterator<T> ptr) {
     dnode<T> *temp = new dnode<T>(x);
     if (is_empty()) {
-        front_node = temp;
-        back_node    = temp;
+        head = temp;
+        tail    = temp;
     } else {
         temp->next = ptr.operator->();
         temp->prev = ptr->prev;
         if (ptr->prev != 0)
             ptr->prev->next = temp;
         else
-            front_node = temp;
+            head = temp;
         ptr->prev = temp;
     }
 }
 
 ///////////////////////////////////////////////////////////
-// REQUIRES: front_node -> a <-> b <-> ... c <- back_node
+// REQUIRES: head -> a <-> b <-> ... c <- tail
 //           && ptr -> a || b || ... || c
-// ENSURES:  if ptr->b then front_node -> a <-> ... c <- back_node
+// ENSURES:  if ptr->b then head -> a <-> ... c <- tail
 //
 // Example:
 // i = l.begin();
@@ -347,16 +349,16 @@ void list<T>::insertBefore(const T& x, iterator<T> ptr) {
 // assert(i == 0);
 //
 template <typename T>
-void list<T>::remove(iterator<T> ptr) {
+void list<T>::remove(iterator<T> & ptr) {
     assert(!is_empty());
     if (ptr == 0) return;
-    if (ptr == front_node)             // Removing first node
-        front_node = front_node->next;
+    if (ptr == head)             // Removing first node
+        head = head->next;
     else
         ptr->prev->next = ptr->next; // In the middle
 
-    if (ptr == back_node)               // Removing last node
-        back_node = back_node->prev;
+    if (ptr == tail)               // Removing last node
+        tail = tail->prev;
     else
         ptr->next->prev = ptr->prev; // In the middle
     delete ptr.operator->();
@@ -365,9 +367,9 @@ void list<T>::remove(iterator<T> ptr) {
 /*
 
 ///////////////////////////////////////////////////////////
-// REQUIRES: front_node -> a <-> b <-> ... c <- back_node
+// REQUIRES: head -> a <-> b <-> ... c <- tail
 //           && ptr -> a || b || ... || c
-// ENSURES:  if ptr->b then front_node -> a <-> ... c <- back_node
+// ENSURES:  if ptr->b then head -> a <-> ... c <- tail
 //
 // rvalue version.
 // Example: l.remove(l.begin());
@@ -376,13 +378,13 @@ template <typename T>
 void list<T>::remove(iterator<T>&& ptr) {
 assert(!is_empty());
 if (ptr == 0) return;
-if (ptr == front_node)             // Removing first node
-front_node = front_node->next;
+if (ptr == head)             // Removing first node
+head = head->next;
 else
 ptr->prev->next = ptr->next; // In the middle
 
-if (ptr == back_node)               // Removing last node
-back_node = back_node->prev;
+if (ptr == tail)               // Removing last node
+tail = tail->prev;
 else
 ptr->next->prev = ptr->prev; // In the middle
 delete ptr.operator->();
