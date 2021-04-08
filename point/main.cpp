@@ -21,8 +21,8 @@
  * information hiding - the interface
  *     (how you access/use something) is separated
  *     from how it is implemented.
- * encapsulation - bundling of data/methods and restricting of direct access to
- *     components
+ * encapsulation - bundling of data with methods operating on said 
+ *     data (classes); restricting of direct access to components 
  *
  * A class is sort of like a black box.
  * information hiding is principle and encapsulation is the technique
