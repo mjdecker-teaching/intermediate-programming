@@ -1,0 +1,51 @@
+Silly Definitions
+    Recursion - is recursion, is recursion, is recursion, ...
+    Recursion
+        See Recursion
+
+Serious
+    https://en.wikipedia.org/wiki/Recursion_(computer_science)
+    Breaking down a large problem, by solving a smaller version of the problem
+    Accomplished, by a function/method calling itself
+
+    Requirements for recursive solution:
+        base case(s)
+            // inputs that stop recursing, trivial answer (known answer). without infinite
+        recursive cases(s) 
+            // inputs that that lead to recursive call(s) possibly with other code
+            // recursive calls need to arrive eventually at base case
+
+Call stack:
+
+    int foo(int a, int b) {
+
+        int product = a * b
+        int sum = product + bar(a, b);
+        return sum;
+
+    }
+
+    int bar(int a, int b) {
+
+        int sum = a + b;
+        return sum;
+
+    }
+
+    https://upload.wikimedia.org/wikipedia/commons/d/d3/Call_stack_layout.svg
+
+// recurence relation
+// single recursion - single recursive call
+// tail recursion - lab learn more why tail recursion more efficient
+// better solved iteratively
+factorial
+
+// Hard iteratively, Recursive easy
+// multiple recusion - multiple recursive calls
+// Tower of Hanoi
+https://en.wikipedia.org/wiki/Tower_of_Hanoi
+2^n - 1
+
+// mutual recursion
+
+Tree data structure lend themselves well to recursive methods
